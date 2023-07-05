@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Project</string>
+    <string name="신장장애">신장장애</string>
+    <string name="지적장애">지적장애</string>
+    <string name="확인">확인</string>
+    <string name="장애선택">장애선택</string>
+    <string name="지체장애">지체장애</string>
+    <string name="심장장애">심장장애</string>
+    <string name="뇌병변장애">뇌병변장애</string>
+    <string name="간장애">간장애</string>
+    <string name="시각장애">시각장애</string>
+    <string name="호흡기장애">호흡기장애</string>
+    <string name="청각장애">청각장애</string>
+    <string name="장루요루장애">장루요루장애</string>
+    <string name="언어장애">언어장애</string>
+    <string name="뇌전증장애">뇌전증장애</string>
+    <string name="안면장애">안면장애</string>
+    <string name="자폐성장애">자폐성장애</string>
+    <string name="정신장애">정신장애</string>
+    <string name="title">Title</string>
+    <string name="this_is_list_example">this_is_list_example</string>
+    <string name="지원하기">지원하기</string>
+</resources>
