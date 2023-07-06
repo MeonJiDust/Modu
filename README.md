@@ -12,77 +12,70 @@
 
 ▸ 회원가입 Activity
 
-<img src="https://github.com/MeonJiDust/Crop/assets/90547127/34edf743-efc7-41f7-88d8-459b84ebfb63"  width="200" height="400">
-<img src="https://github.com/MeonJiDust/Crop/assets/90547127/2f6bba42-f84d-41ba-a6ab-992d9fd20053"  width="200" height="400"><br/><br/>
+<img src="https://github.com/MeonJiDust/Modu/assets/90547127/595c7b31-0510-492c-9183-099d1ebe57d4"  width="200" height="400">
+<img src="https://github.com/MeonJiDust/Modu/assets/90547127/7419b699-63ee-4f29-9cb3-73888503996e"  width="200" height="400">
+<img src="https://github.com/MeonJiDust/Modu/assets/90547127/6a3fcd46-c4d7-43d8-94df-cb67afb2d348"  width="200" height="400"><br/><br/>
 
-▸ 작물선택 Activity, 판매작물 list Activity ( 작물선택 Activity에서 선택한 작물에 따라, 판매작물list Activity의 상단 멘트가 바뀜 )
+▸ 지원 Activity - 장애명을 선택하면 해당 장애를 가진 사람들이 지원할 수 있는 곳들이 리스트업 된다.
 
-<img src="https://github.com/MeonJiDust/Crop/assets/90547127/2ce53865-6aa0-4d2e-a5c8-14b93941da8e"  width="200" height="400">
-<img src="https://github.com/MeonJiDust/Crop/assets/90547127/3cd654e7-1e86-45a7-a409-76c0bd806ccd"  width="200" height="400">
-<img src="https://github.com/MeonJiDust/Crop/assets/90547127/4cd43139-04a1-4a94-a471-f72bf15159d2"  width="200" height="400"><br/><br/>
+<img src="https://github.com/MeonJiDust/Modu/assets/90547127/4de93395-830f-4c1e-8df9-82e614178795"  width="200" height="400">
+<img src="https://github.com/MeonJiDust/Modu/assets/90547127/cfd84659-8b1c-4efb-95c3-c16a918ec444"  width="200" height="400">
+<img src="https://github.com/MeonJiDust/Modu/assets/90547127/32d05f48-c567-471e-ad10-815ea5ba20e4"  width="200" height="400"><br/><br/>
 
-▸ 작물등록 Activity
+▸ 소통 Activity - 사용자들끼리 서로 취업정보 등을 공유할 수 있는 커뮤니
 
-<img src="https://github.com/MeonJiDust/Crop/assets/90547127/e02dab80-7d6c-49f0-aea7-e9aaee5ce1a5"  width="200" height="400">
-<img src="https://github.com/MeonJiDust/Crop/assets/90547127/e00e5270-4949-48d3-8013-3fab8e54538a"  width="200" height="400">
-<img src="https://github.com/MeonJiDust/Crop/assets/90547127/85f62e3a-a4cd-42ce-8bd1-75b0862fb6c6"  width="200" height="400"><br/><br/>
+<img src="https://github.com/MeonJiDust/Modu/assets/90547127/b192bf89-9f43-4224-ab92-8bd562f9e35d"  width="200" height="400">
+<img src="https://github.com/MeonJiDust/Modu/assets/90547127/a0f23de7-80c1-4148-b2d9-096c23224255"  width="200" height="400"><br/><br/>
 
 # ⭐️ 주요 코드 리뷰
 
-▸ 작물 등록 화면에서 '작물선택'버튼을 누르면 작물을 선택할 수 있는 다이얼로그가 띄워지게 되고 작물을 선택하면, **해당 작물에 대한 현재 시세를 볼 수 있는** 기능
+▸ 파이어베이스의 Authentication과 Realtime Database기능을 사용하여 회원가입 기능을 구현하였다. 
+
+UserAccount 클래스에는 유저 정보를 등록하는데 사용할 getter와 setter, 생성자가 들어있다. 
+
+realtime database에 "UserAccount" 밑에 유저의 uid명 밑에 유저 정보들을 저장함.
 ```
-builder = new AlertDialog.Builder(EnrollVegetActivity.this);
-        builder.setTitle("작물을 선택하세요");
-        builder.setItems(crops, new DialogInterface.OnClickListener() {
+mAuth = FirebaseAuth.getInstance();
+mDatabase = FirebaseDatabase.getInstance();
+mReference = mDatabase.getInstance().getReference();
+
+FirebaseUser user = mAuth.getCurrentUser();
+UserAccount account = new UserAccount();
+
+account.setUid(user.getUid());
+account.setEmail(user.getEmail());
+account.setPassword(pw);
+account.setName(name);
+account.setBirth(birth);
+account.setPhone(phone);
+
+mReference.child("UserAccount").child(user.getUid()).setValue(account);
+```
+<br/><br/>
+▸ 라디오버튼은 다중선택이 되지 않아, 여러 장애를 가지고 있는 사람들이 여러 버튼을 선택할 수 없었다. 따라서 체크박스로 선택 화면을 바꾸었고, 체크박스가 해제되면 list에 저장된 "장애명"을 삭제하고, 모든 선택이 완료 되면 realtime database에 "disability name" -> "유저 uid" 하위에 선택한 장애명들이 담긴 리스트를 저장한다.
+
+```
+ArrayList<String> list = new ArrayList<>();
+/*...*/
+CheckBox button_자폐성장애 = (CheckBox) findViewById(R.id.btn_자폐성장애);
+        CheckBox button_정신장애 = (CheckBox) findViewById(R.id.btn_정신장애);
+        DisabilityButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                btn_select_food_crops.setText(crops[i]);
-                crops_view.setText(quote[i] + "   ");
-            }
-        });
+            public void onClick(View view) {
+                select.clear();
+                if (button_지체장애.isChecked()) {
+                    list.add("지체장애");
+                }else{
+                    list.remove("지체장애");
+                }
+                /*...*/
+                mReference.child("disability name").child(mAuth.getUid()).setValue(list);
 ```
 <br/><br/>
-▸ 이전 화면에서 선택한 작물의 종류에 따라 그 다음 화면의 상단 사진이 바뀌어야하는데, 작물마다 Activity를 따로 쓰기엔 너무 비효율적인 것 같았다. 
 
-그래서 **SharedPreferences 라이브러리를 사용**하였다.
+# 📺 구동 영상
 
-이전 Activity에서 선택 작물에 대한 태그값을 putExtra로 다음 Activity로 넘겨주고, 같은 태그값을 SharedPreferences에 저장한다. 다음 Activity에서는 받은 태그값으로 선택 작물에 따라 각각 다른 상단사진을 띄울 수 있게된다.
-
-```
-//이전 Activity에서 2번째 작물 선택
-imageView2.setOnClickListener(new View.OnClickListener(){
-        @Override
-        public void onClick(View veiw){
-        Intent intent = new Intent(VegetSelectActivity.this, CropListActivity.class);
-                intent.putExtra("tag", 1);
-                sharedPreferences = getSharedPreferences("test", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("tag", 1);
-                editor.commit();
-                startActivity(intent);
-        }
-});
-```
-<br/><br/>
-▸ 회원가입 Activity에서, 판매자는 자신이 농부임을 증명하는 서류를 제출할 수 있는 파일 선택 버튼이 필요하지만, 구매자는 해당 버튼이 필요없다.
-
-따라서 판매자와 구매자를 선택할 수 있는 라디오버튼에서 해당 버튼을 보일지 말지를 결정할 수 있도록 작성하였다.
-
-```
-public void onCheckedChanged(RadioGroup radioGroup, int i) {
-
-        if (i == R.id.seller){
-                user_type[0] = "판매자";
-                file_name.setVisibility(View.VISIBLE);
-                select_file.setVisibility(View.VISIBLE);
-        }else if(i == R.id.buyer){
-                user_type[0] = "구매자";
-                file_name.setVisibility(View.INVISIBLE);
-                select_file.setVisibility(View.INVISIBLE);
-        }
-}
-```
-<br/><br/>
+[![Video Label](http://img.youtube.com/vi/DsZBbVkaedg/0.jpg)](https://www.youtube.com/watch?v=DsZBbVkaedg)
 # 🤔 배운점
 
 ▸ 안드로이드 스튜디오의 라이브러리 중에 SharedPreferences라는 라이브러리를 새로 알게 되었고, 이후 프로젝트 진행 중에도 이번 같은 상황( DB를 쓰기엔 너무 작은 데이터를 저장해야할 때 )이 생기면 SharedPreferences를 사용하고 있다.
