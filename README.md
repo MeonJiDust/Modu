@@ -52,7 +52,9 @@ account.setPhone(phone);
 mReference.child("UserAccount").child(user.getUid()).setValue(account);
 ```
 <br/><br/>
-▸ 라디오버튼은 다중선택이 되지 않아, 여러 장애를 가지고 있는 사람들이 여러 버튼을 선택할 수 없었다. 따라서 체크박스로 선택 화면을 바꾸었고, 체크박스가 해제되면 list에 저장된 "장애명"을 삭제하고, 모든 선택이 완료 되면 realtime database에 "disability name" -> "유저 uid" 하위에 선택한 장애명들이 담긴 리스트를 저장한다.
+▸ 라디오버튼은 다중선택이 되지 않아, 여러 장애를 가지고 있는 사람들이 여러 버튼을 선택할 수 없었다. 
+
+따라서 체크박스로 선택 화면을 바꾸었고, 체크박스가 해제되면 list에 저장된 "장애명"을 삭제하고, 모든 선택이 완료 되면 realtime database에 "disability name" -> "유저 uid" 하위에 선택한 장애명들이 담긴 리스트를 저장한다.
 
 ```
 ArrayList<String> list = new ArrayList<>();
@@ -76,10 +78,4 @@ CheckBox button_자폐성장애 = (CheckBox) findViewById(R.id.btn_자폐성장�
 # 📺 구동 영상
 
 [![Video Label](http://img.youtube.com/vi/DsZBbVkaedg/0.jpg)](https://www.youtube.com/watch?v=DsZBbVkaedg)
-# 🤔 배운점
-
-▸ 안드로이드 스튜디오의 라이브러리 중에 SharedPreferences라는 라이브러리를 새로 알게 되었고, 이후 프로젝트 진행 중에도 이번 같은 상황( DB를 쓰기엔 너무 작은 데이터를 저장해야할 때 )이 생기면 SharedPreferences를 사용하고 있다.
-
-▸ 키보드 밖의 화면을 터치하면 키보드가 내려가는 것과 같은 사용자가 느낄 수 있는 자잘한 오류들의 존재를 알게 되었다.
-
 
